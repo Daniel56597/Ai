@@ -668,8 +668,8 @@
                 <input type="text" class="form-input" id="customPersonaInput" placeholder="Например: Объясняй максимально простым языком с примерами">
             </div>
             <div class="form-group">
-                <label class="form-label">Gemini API-ключ (для работы вне среды предпросмотра)</label>
-                <input type="password" class="form-input" id="apiKeyInput" value="AQ.Ab8RN6I6Tmwxdt6BylLrOVaZiY3AqeIdCKAU745gnTDg-gbtUg" placeholder="Вставьте ваш ключ API">
+                <label class="form-label">Gemini API-ключ</label>
+                <input type="password" class="form-input" id="apiKeyInput" value="AQ.Ab8RN6JUSaFpuXy8o_qacFKLI3Q67uTBok0q_819SvZ2TbALhw" placeholder="Вставьте ваш ключ API">
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeSettings()">Отмена</button>
@@ -699,7 +699,7 @@
         let state = {
             userName: "Пользователь",
             customPersona: "",
-            apiKey: "AQ.Ab8RN6I6Tmwxdt6BytLrOVaZiY3AqeIdCKAU745gnTDg-gbtUg",
+            apiKey: "AQ.Ab8RN6JUSaFpuXy8o_qacFKLI3Q67uTBok0q_819SvZ2TbALhw",
             accuracyMode: "expert",
             topic: "general",
             chats: [],
@@ -728,7 +728,7 @@
             }
             document.getElementById("userNameInput").value = state.userName || "Пользователь";
             document.getElementById("customPersonaInput").value = state.customPersona || "";
-            document.getElementById("apiKeyInput").value = state.apiKey || "AQ.Ab8RN6I6Tmwxdt6BytLrOVaZiY3AqeIdCKAU745gnTDg-gbtUg";
+            document.getElementById("apiKeyInput").value = state.apiKey || "AQ.Ab8RN6JUSaFpuXy8o_qacFKLI3Q67uTBok0q_819SvZ2TbALhw";
             document.getElementById("modeSelect").value = state.accuracyMode || "expert";
             document.getElementById("topicSelect").value = state.topic || "general";
         }
@@ -915,7 +915,7 @@
         }
 
         async function callGeminiAPI(history) {
-            const apiKey = state.apiKey || "AQ.Ab8RN6I6Tmwxdt6BylLrOVaZiY3AqeIdCKAU745gnTDg-gbtUg";
+            const apiKey = state.apiKey || "AQ.Ab8RN6JUSaFpuXy8o_qacFKLI3Q67uTBok0q_819SvZ2TbALhw";
             const model = "gemini-3-flash-preview";
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 

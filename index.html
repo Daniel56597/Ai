@@ -1214,6 +1214,10 @@
         <label>Дополнительный стиль общения Ai Su (необязательно)</label>
         <textarea id="customPersonaInput" class="form-textarea" rows="3" placeholder="Например: Объясняй максимально простым языком с примерами из жизни"></textarea>
       </div>
+      <div class="form-group">
+        <label>Свой Gemini API-ключ (необязательно — оставьте пустым для встроенного доступа)</label>
+        <input id="customApiKeyInput" class="form-input" type="password" placeholder="AIzaSy... (нужен только при открытии файла вне предпросмотра)" />
+      </div>
       <div class="modal-actions">
         <button class="btn-danger-outline" onclick="clearAllHistory()">🗑️ Очистить все чаты</button>
         <button class="btn-secondary" onclick="closeModal('settingsModal')">Отмена</button>
@@ -1229,8 +1233,8 @@
     // =========================================================================
     // CONFIGURATION & STATE
     // =========================================================================
-    const apiKey = ""; // Runtime-injected Gemini API key
-    const GEMINI_MODEL = "gemini-2.5-flash";
+    const apiKey = ""; // Runtime-injected Gemini API key for gemini-3-flash-preview
+    const GEMINI_MODEL = "gemini-3-flash-preview";
     const STORAGE_KEY = "aisu_app_state_v2";
 
     const BASE_SYSTEM_PROMPT = `Ты — Ai Su, универсальная нейросеть для всех пользователей. Твоя главная задача: отвечать на абсолютно любые вопросы строго по заданной теме, давать проверенные, логичные и точные ответы на русском языке (или на языке вопроса).
@@ -1243,6 +1247,7 @@
     let state = {
       userName: "",
       customPersona: "",
+      customApiKey: "",
       accuracyMode: "expert", // "expert" | "fast"
       chats: [],
       activeChatId: null
@@ -1708,7 +1713,8 @@
     }
 
     async function callGeminiWithRetry(messagesHistory, currentTopic) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+      const effectiveKey = (state.customApiKey && state.customApiKey.trim()) ? state.customApiKey.trim() : apiKey;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${effectiveKey}`;
 
       // Build multi-turn conversation contents
       const contents = messagesHistory.map((m, idx) => {
@@ -1848,6 +1854,7 @@
       if (id === "settingsModal") {
         document.getElementById("userNameInput").value = state.userName || "";
         document.getElementById("customPersonaInput").value = state.customPersona || "";
+        document.getElementById("customApiKeyInput").value = state.customApiKey || "";
       } else if (id === "shareModal") {
         let shareUrl = window.location.href.split("#")[0];
         if (state.customPersona && state.customPersona.trim()) {
@@ -1874,8 +1881,10 @@
     function saveSettings() {
       const nameVal = document.getElementById("userNameInput").value.trim();
       const personaVal = document.getElementById("customPersonaInput").value.trim();
+      const keyVal = document.getElementById("customApiKeyInput").value.trim();
       state.userName = nameVal === "Создатель" ? "" : nameVal;
       state.customPersona = personaVal;
+      state.customApiKey = keyVal;
       saveState();
       updateHeaderUI();
       renderFeed();
